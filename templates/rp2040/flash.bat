@@ -12,7 +12,7 @@ REM Get the directory of this script
 set "scriptDir=%~dp0"
 REM Build directory and UF2 file path
 set "buildDir=%scriptDir%build"
-set "uf2File=%buildDir%\pico.uf2"
+set "uf2File=%buildDir%\${PROJECT_NAME}.uf2"
 
 REM Path to uf2conv.py (adjust as needed)
 set "uf2convPath=D:\Programs\Arduino\Arduino IDE Portable\portable\packages\rp2040\hardware\rp2040\3.2.1\tools\uf2conv.py"
