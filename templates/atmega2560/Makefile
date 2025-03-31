@@ -2,7 +2,7 @@
 
 # Build parameters
 F_CPU       = 16000000UL
-MMCU        = atmega328p
+MMCU        = atmega2560
 SOURCE      = ${PROJECT_NAME}.c
 OUTPUT_ELF  = build\${PROJECT_NAME}.elf
 OUTPUT_HEX  = build\${PROJECT_NAME}.hex
@@ -26,8 +26,8 @@ clean:
 # Flash parameters (modify paths as needed)
 AVRDUDE      = avrdude.exe
 AVRDUDE_CONF = D:\Programs\Arduino\Arduino IDE Portable\hardware\tools\avr\etc\avrdude.conf
-MCU          = atmega328p
-PROGRAMMER   = arduino
+MCU          = atmega2560
+PROGRAMMER   = wiring
 BAUD         = 115200
 
 !IF "$(COM_PORT)" == ""

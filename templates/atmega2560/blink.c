@@ -3,15 +3,15 @@
 #include <util/delay.h>
 
 #define DELAY_MS 250               // Delay in milliseconds
-#define PB5_MASK (1 << PB5)        // Bitmask for PB5
+#define PB7_MASK (1 << PB7)        // Bitmask for PB7
 
 int main(void) {
     // Set PB7 as output
-    DDRB |= PB5_MASK;
+    DDRB |= PB7_MASK;
 
     while (1) {
-        // Toggle PB5
-        PORTB ^= PB5_MASK;
+        // Toggle PB7
+        PORTB ^= PB7_MASK;
         _delay_ms(DELAY_MS);
     }
 }
