@@ -7,7 +7,7 @@ SOURCE      = ${PROJECT_NAME}.c
 OUTPUT_ELF  = build\${PROJECT_NAME}.elf
 OUTPUT_HEX  = build\${PROJECT_NAME}.hex
 
-# Default target: build the HEX file and generate flash.bat.
+# Default target: build the HEX file.
 all: $(OUTPUT_HEX) flash_bat
 
 # Compile the source file to an ELF file
@@ -39,20 +39,16 @@ flash: $(OUTPUT_HEX)
 	$(AVRDUDE) -v -C "$(AVRDUDE_CONF)" -p $(MCU) -c $(PROGRAMMER) -P $(COM_PORT) -b $(BAUD) -D -U flash:w:"$(OUTPUT_HEX)":i
 
 # -------------------------------------------------------------------
-# Create a batch file (flash.bat) that can be used to flash the MCU.
-# If flash.bat already exists, do not override it.
+# Create a batch file (flash.bat) that prompts for a COM port, fixes it
+# if necessary, and then calls nmake flash.
 flash_bat: $(OUTPUT_HEX)
-	@if exist flash.bat (echo flash.bat already exists, skipping generation.) else ( ^ 
-	   echo @echo off > flash.bat ^&^
-	   echo REM Prompt for COM port >> flash.bat ^&^
-	   echo set /p COMPort=Enter COM port (e.g. COM13): >> flash.bat ^&^
-	   echo REM Check if the input starts with "COM" (case-insensitive) >> flash.bat ^&^
-	   echo echo %%COMPort%% ^| findstr /b /i "COM" >nul >> flash.bat ^&^
-	   echo if errorlevel 1 ( >> flash.bat ^&^
-	   echo    set COMPort=COM%%COMPort%% >> flash.bat ^&^
-	   echo ) >> flash.bat ^&^
-	   echo echo Flashing $(OUTPUT_HEX) to MCU using COM port: %%COMPort%% >> flash.bat ^&^
-	   echo $(AVRDUDE) -v -C "$(AVRDUDE_CONF)" -p $(MCU) -c $(PROGRAMMER) -P %%COMPort%% -b $(BAUD) -D -U flash:w:"$(OUTPUT_HEX)":i >> flash.bat ^&^
-	   echo pause >> flash.bat ^&^
-	   echo Batch file created at flash.bat \
-	)
+	@echo @echo off > flash.bat
+	@echo set /p COMPort=Enter COM port (e.g. COM13): >> flash.bat
+	@echo echo %%COMPort%% ^| findstr /b /i "COM" >nul >> flash.bat
+	@echo if errorlevel 1 ^( >> flash.bat
+	@echo     set COMPort=COM%%COMPort%% >> flash.bat
+	@echo ^) >> flash.bat
+	@echo nmake flash COM_PORT=%%COMPort%% >> flash.bat
+	@echo pause >> flash.bat
+	@echo Batch file created at flash.bat
+
